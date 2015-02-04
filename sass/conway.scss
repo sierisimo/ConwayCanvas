@@ -1,0 +1,16 @@
+@import "compass/reset";
+@import "compass/css3";
+
+#container {
+  height: 80%;
+  width: 80%;
+  display: inline;
+  canvas {
+    height: 80%;
+    width: 80%;
+  }
+}
+
+button{
+  display: inline;
+}
