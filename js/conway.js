@@ -1,7 +1,8 @@
 //TODO: Change this for a function that can be called
-/*
+
 document.addEventListener('DOMContentLoaded',function(){
-  var canvas = document.getElementById("conway"),
+/*
+    var canvas = document.getElementById("conway"),
     canHeight = canvas.offsetHeight,
     canWidth = canvas.offsetWidth,
     squares = 10, //TODO: Change this for a variable that could be setted
@@ -21,8 +22,10 @@ document.addEventListener('DOMContentLoaded',function(){
     //ctx.stroke();
   //}
     window.ctx = ctx;
-});
 */
+  var svg = d3.select("#container").append("svg");
+});
+
 
 var canvasClass = {
   Square: function(){
