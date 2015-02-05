@@ -2,12 +2,16 @@
 @import "compass/css3";
 
 #container {
-  height: 80%;
-  width: 80%;
+  height: 100%;
+  width: 100%;
   display: inline;
   canvas {
-    height: 80%;
-    width: 80%;
+    height: 900px;
+    width: 900px;
+    margin:{
+      left: 10px;
+      top: 10px;
+    }
   }
 }
 
