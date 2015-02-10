@@ -15,7 +15,7 @@ a img { border: none; }
 
 article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary { display: block; }
 
-#container { height: 100%; width: 100%; display: inline; }
-#container canvas { height: 900px; width: 900px; margin-left: 10px; margin-top: 10px; }
-
 button { display: inline; }
+
+#container { height: 100%; width: 100%; display: inline; }
+#container svg { margin-left: 50px; margin-top: 50px; }

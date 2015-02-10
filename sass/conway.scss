@@ -1,20 +1,14 @@
-@import "compass/reset";
-@import "compass/css3";
+@import "base";
+@import "svg";
 
 #container {
   height: 100%;
   width: 100%;
   display: inline;
-  canvas {
-    height: 900px;
-    width: 900px;
+  svg {
     margin:{
-      left: 10px;
-      top: 10px;
+      left: 50px;
+      top: 50px;
     }
   }
-}
-
-button{
-  display: inline;
 }

@@ -1,35 +1,41 @@
-//TODO: Change this for a function that can be called
-
 document.addEventListener('DOMContentLoaded',function(){
-/*
-    var canvas = document.getElementById("conway"),
-    canHeight = canvas.offsetHeight,
-    canWidth = canvas.offsetWidth,
-    squares = 10, //TODO: Change this for a variable that could be setted
-    ctx = canvas.getContext("2d");
+  var width = 600, height = width,
+    svg = d3.select("#container").append("svg")
+      .attr("width",width).attr("height",height),
+    dataset = (function(){
+      var r = [], t = width%10, p = height%10,
+        tw = (width-t)/10, th = (height-p)/10;
 
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(0,0);
-    ctx.lineTo(0,140);
-    ctx.stroke();
+      for(var i = 0; i < width-t; i+=tw){
+        for(var j = 0; j < height-p; j+=th)
+          r.push(new figClass.Square(i,j));
+      }
+      return r;
+    })(),
+    rects = svg.selectAll("rect")
+      .data(dataset).enter().append("rect");
+    /*
+    circles = svg.selectAll("circle")
+     .data(dataset)
+     .enter()
+     .append("circle");
 
-    //for (var i = 0; i < 10; i++){
-    //ctx.lineWidth = 1+i;
-    //ctx.beginPath();
-    //ctx.moveTo(5+i*14,5);
-    //ctx.lineTo(5+i*14,140);
-    //ctx.stroke();
-  //}
-    window.ctx = ctx;
-*/
-  var svg = d3.select("#container").append("svg");
+  circles.attr('cx',function(d, i) {
+            return (i * 50) + 25;
+        })
+       .attr("cy", height/2)
+       .attr("r", function(d) {
+            return d;
+       });
+     */
+     console.log(rects);
 });
 
 
-var canvasClass = {
-  Square: function(){
+var figClass = {
+  Square: function(x,y){
     this.alive = false;
-
+    this.x = x;
+    this.y = y;
   }
 };
