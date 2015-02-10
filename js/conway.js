@@ -1,12 +1,14 @@
+//Ugly, Sier doesn't like globals
+var width = 600, height = width, total = 6;//Simple values for all svg, change it if you want bigger or smaller svg
+
 document.addEventListener('DOMContentLoaded',function(){
-  var width = 600, height = width, //Simple values for all svg, change it if you want bigger or smaller svg
-    btn = document.getElementById('play'),
+  var btn = document.getElementById('play'),
     svg = d3.select("#container").append("svg")
       .attr("width",width).attr("height",height),
     dataset = (function(){
       //Change the 10 for the number of elements you want in the game.
-      var r = [], t = width%10, p = height%10,
-        tw = (width-t)/10, th = (height-p)/10;
+      var r = [], t = width%total, p = height%total,
+        tw = (width-t)/total, th = (height-p)/total;
 
       // Create the square. That easy
       for(var i = 0; i < width-t; i+=tw){
@@ -56,16 +58,63 @@ document.addEventListener('DOMContentLoaded',function(){
     conway.play(rects);
   });
 
+  //Change states and classes bassed on if the element survives or not
+  rects.on("cicleCompleted",function(){
+    //Change classes and status
+  });
+
 });
 
 var conway = {
   Square: function(a,b,c){
     this.alive = false;
+    this.survive = false;
     this.__defineGetter__("x",function(){return a;});
     this.__defineGetter__("y",function(){return b;});
     this.__defineGetter__("l",function(){return c});
   },
+  judgeEvent: new CustomEvent("cicleCompleted",{
+    bubles:false,
+    cancelable: false
+  }),
   play: function(rects){
+    rects.each(function(d){
+      var nTopL = d.x > 0 ?
+                    d.y > 0 ?
+                      d3.select('rect[x="'+(d.x-d.l)+'"][y="'+(d.y-d.l)+'"]')
+                    :false
+                  :false,
+        nTop = d.y > 0 ? d3.select('rect[x="'+d.x+'"][y="'+(d.y-d.l)+'"]') :false,
+        nTopR = (d.x+d.l) < width ?
+                  d.y > 0 ?
+                    d3.select('rect[x="'+(d.x+d.l)+'"][y="'+(d.y-d.l)+'"]')
+                  :false
+                :false,
+        nLeft = d.x > 0 ? d3.select('rect[x="'+(d.x-d.l)+'"][y="'+d.y+'"]') :false,
+        nRight = (d.x+d.l) < width ? d3.select('rect[x="'+(d.x+d.l)+'"][y="'+d.y+'"]') :false
+        nDownL = d.x > 0 ?
+                  (d.y+d.l) < height ?
+                    d3.select('rect[x="'+(d.x-d.l)+'"][y="'+(d.y+d.l)+'"]')
+                  :false
+                :false,
+        nDown = (d.y+d.l) < height ? d3.select('rect[x="'+d.x+'"][y="'+(d.y+d.l)+'"]') :false,
+        nDownR = (d.x+d.l) < width ?
+                    (d.y+d.l) < height ?
+                      d3.select('rect[x="'+(d.x+d.l)+'"][y="'+(d.y+d.l)+'"]')
+                    :false
+                  :false;
 
+     console.log('rect[x="'+d.x+'"], rect[y="'+d.y+'"]',
+       nTopL && nTopL.attr && nTopL.attr("class"),
+       nTop && nTop.attr && nTop.attr("class"),
+       nTopR && nTopR.attr && nTopR.attr("class"),
+       nLeft && nLeft.attr && nLeft.attr("class"),
+       nRight && nRight.attr && nRight.attr("class"),
+       nDownL && nDownL.attr && nDownL.attr("class"),
+       nDown && nDown.attr && nDown.attr("class"),
+       nDownR && nDownR.attr && nDownR.attr("class"));
+      
+      //this.dispatchEvent(conway.judgeEvent);
+    });
   }
 };
