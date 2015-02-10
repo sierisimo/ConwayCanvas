@@ -17,5 +17,8 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
 
 button { display: inline; }
 
+rect.alive { fill: #0000c8; stroke: #fafafa; stroke-width: 2; }
+rect.dead { fill: white; stroke: black; stroke-width: 2; }
+
 #container { height: 100%; width: 100%; display: inline; }
 #container svg { margin-left: 50px; margin-top: 50px; }
