@@ -1,5 +1,6 @@
 //Ugly, Sier doesn't like globals
-var width = 600, height = width, total = 10;//Simple values for all svg, change it if you want bigger or smaller svg
+var width = 600, height = width, total = 10,
+  time = 1000;//Simple values for all svg, change it if you want bigger or smaller svg
 
 document.addEventListener('DOMContentLoaded',function(){
   var btn = document.getElementById('play'),
@@ -94,7 +95,7 @@ var conway = {
       svg.each(function(){
         this.dispatchEvent(conway.judgeEvent);
       });
-    },2000);
+    },time);
   },
   checkStatus: function(d,i){
     var aliveNeighbors = 0,
