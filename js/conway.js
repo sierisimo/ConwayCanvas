@@ -1,5 +1,5 @@
 //Ugly, Sier doesn't like globals
-var width = 600, height = width, total = 6;//Simple values for all svg, change it if you want bigger or smaller svg
+var width = 600, height = width, total = 10;//Simple values for all svg, change it if you want bigger or smaller svg
 
 document.addEventListener('DOMContentLoaded',function(){
   var btn = document.getElementById('play'),
@@ -55,12 +55,23 @@ document.addEventListener('DOMContentLoaded',function(){
   //Prevent the user change the config after started
   btn.addEventListener('click',function(){
     rects.on("click",null);
-    conway.play(rects);
+    conway.play(svg,rects);
   });
 
   //Change states and classes bassed on if the element survives or not
-  rects.on("cicleCompleted",function(){
-    //Change classes and status
+  svg.on("cicleCompleted",function(d,p,e){
+    console.log("Doing a cicle");
+    rects.each(conway.checkStatus);
+    rects.each(function(d,i){
+      d.alive = d.survive;
+      if(d.alive){
+        this.classList.remove("dead");
+        this.classList.add("alive");
+      }else{
+        this.classList.remove("alive");
+        this.classList.add("dead");
+      }
+    });
   });
 
 });
@@ -77,33 +88,41 @@ var conway = {
     bubles:false,
     cancelable: false
   }),
-  play: function(rects){
-    rects.each(function(d){
-      var nTopL = d.x > 0 ?
-                    d.y > 0 ?
-                      d3.select('rect[x="'+(d.x-d.l)+'"][y="'+(d.y-d.l)+'"]')
-                    :false
-                  :false,
-        nTop = d.y > 0 ? d3.select('rect[x="'+d.x+'"][y="'+(d.y-d.l)+'"]') :false,
-        nTopR = (d.x+d.l) < width ?
+  play: function(svg,rects){
+    rects.each(conway.checkStatus);
+    var interval = setInterval(function(){
+      svg.each(function(){
+        this.dispatchEvent(conway.judgeEvent);
+      });
+    },2000);
+  },
+  checkStatus: function(d,i){
+    var aliveNeighbors = 0,
+      nTopL = d.x > 0 ?
                   d.y > 0 ?
-                    d3.select('rect[x="'+(d.x+d.l)+'"][y="'+(d.y-d.l)+'"]')
+                    d3.select('rect[x="'+(d.x-d.l)+'"][y="'+(d.y-d.l)+'"]')
                   :false
                 :false,
-        nLeft = d.x > 0 ? d3.select('rect[x="'+(d.x-d.l)+'"][y="'+d.y+'"]') :false,
-        nRight = (d.x+d.l) < width ? d3.select('rect[x="'+(d.x+d.l)+'"][y="'+d.y+'"]') :false
-        nDownL = d.x > 0 ?
+      nTop = d.y > 0 ? d3.select('rect[x="'+d.x+'"][y="'+(d.y-d.l)+'"]') :false,
+      nTopR = (d.x+d.l) < width ?
+                d.y > 0 ?
+                  d3.select('rect[x="'+(d.x+d.l)+'"][y="'+(d.y-d.l)+'"]')
+                :false
+              :false,
+      nLeft = d.x > 0 ? d3.select('rect[x="'+(d.x-d.l)+'"][y="'+d.y+'"]') :false,
+      nRight = (d.x+d.l) < width ? d3.select('rect[x="'+(d.x+d.l)+'"][y="'+d.y+'"]') :false
+      nDownL = d.x > 0 ?
+                (d.y+d.l) < height ?
+                  d3.select('rect[x="'+(d.x-d.l)+'"][y="'+(d.y+d.l)+'"]')
+                :false
+              :false,
+      nDown = (d.y+d.l) < height ? d3.select('rect[x="'+d.x+'"][y="'+(d.y+d.l)+'"]') :false,
+      nDownR = (d.x+d.l) < width ?
                   (d.y+d.l) < height ?
-                    d3.select('rect[x="'+(d.x-d.l)+'"][y="'+(d.y+d.l)+'"]')
+                    d3.select('rect[x="'+(d.x+d.l)+'"][y="'+(d.y+d.l)+'"]')
                   :false
-                :false,
-        nDown = (d.y+d.l) < height ? d3.select('rect[x="'+d.x+'"][y="'+(d.y+d.l)+'"]') :false,
-        nDownR = (d.x+d.l) < width ?
-                    (d.y+d.l) < height ?
-                      d3.select('rect[x="'+(d.x+d.l)+'"][y="'+(d.y+d.l)+'"]')
-                    :false
-                  :false;
-
+                :false;
+    /*
      console.log('rect[x="'+d.x+'"], rect[y="'+d.y+'"]',
        nTopL && nTopL.attr && nTopL.attr("class"),
        nTop && nTop.attr && nTop.attr("class"),
@@ -113,8 +132,26 @@ var conway = {
        nDownL && nDownL.attr && nDownL.attr("class"),
        nDown && nDown.attr && nDown.attr("class"),
        nDownR && nDownR.attr && nDownR.attr("class"));
-      
-      //this.dispatchEvent(conway.judgeEvent);
-    });
+    */
+     nTopL && nTopL.attr("class") === "alive" && aliveNeighbors++;
+     nTop && nTop.attr("class") === "alive" && aliveNeighbors++;
+     nTopR && nTopR.attr("class") === "alive" && aliveNeighbors++;
+     nLeft && nLeft.attr("class") === "alive" && aliveNeighbors++;
+     nRight && nRight.attr("class") === "alive" && aliveNeighbors++;
+     nDownL && nDownL.attr("class") === "alive" && aliveNeighbors++;
+     nDown && nDown.attr("class") === "alive" && aliveNeighbors++;
+     nDownR && nDownR.attr("class") === "alive" && aliveNeighbors++;
+
+     switch(aliveNeighbors){
+       case 2:
+         d.survive = d.alive;
+         break;
+       case 3:
+         d.survive = true;
+         break;
+       default:
+         d.survive = false;
+         break;
+     }
   }
 };
